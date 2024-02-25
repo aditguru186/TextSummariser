@@ -1,26 +1,9 @@
 #Text Frequency Model 2
 #TFIDF implementation for a sample text
-#Summarization to some extent
 import math
 import textblob
 from textblob import TextBlob as tb
 import re
-import sys
-
-#reload(sys)  
-#sys.setdefaultencoding('utf8')
-
-def preProcess(a):
-    a=re.sub("�","'",a)
-    a=re.sub("'",'',a)
-    a=re.sub("/",' or ',a)
-    a=re.sub('�','',a)
-    a=re.sub('�','',a)
-    a=re.sub('"','',a)
-    a=re.sub("p.m",'pm',a)
-    a=re.sub("a.m","am",a)
-    a=re.sub("�",'.',a)
-    return a
 
 def removeStopWords(text_list,stopWords):
     new_text=[]
@@ -31,10 +14,12 @@ def removeStopWords(text_list,stopWords):
             continue
         else:
             new_text.append(w.lower())
+
     return new_text
 
 def getStopWords():
-    fp=open('stopwords.txt','r')
+    currentpath = '/Users/aguru/Desktop/AdiWorkspace/python/TextSummariser/TextSummariser/Demo/'
+    fp=open((currentpath+'stopwords.txt'),'r')
     line=fp.readline()
     stop_words=[]
     while line:
@@ -47,36 +32,50 @@ def getStopWords():
 def tf(word, blob):
     return (float)(blob.words.count(word)) / (float)(len(blob.words))
 
+def getInputText():
+    with open('/Users/aguru/Desktop/AdiWorkspace/python/TextSummariser/TextSummariser/Demo/TextFrequencyDemo/input.txt','r') as fp_input:
+         mylist = [line.rstrip('\n') for line in fp_input]
+    # fp_input = open('/Users/aguru/Desktop/AdiWorkspace/python/TextSummariser/TextSummariser/Demo/PageRankDemo/input.txt','r')
+    input_text = """"""
+    for i in mylist:
+        input_text = input_text + " " + i
+    fp_input.close()
+    return input_text
 
-string=input('Enter the passage or document that needs to be summarised:\n')
-string=preProcess(string)
-input_text=tb(string)
-#print(input_text.words)
+def logOutputText(summary:str):
+    try:
+        with open('/Users/aguru/Desktop/AdiWorkspace/python/TextSummariser/TextSummariser/Demo/TextFrequencyDemo/output.txt','w+t') as fp_output:
+            summary = "\nThe Summary is : "+summary
+            fp_output.write(summary)
+    except Exception as e:
+        print(e)
+
+#########
+#########
+#########
+        
+input_string2 = getInputText()
+input_text_blob=tb(input_string2)
 stopWords=getStopWords()
-newTextList=removeStopWords(input_text.words,stopWords)
-#print(new_text)
-#count=tf('stands',input_text)
+newTextList=removeStopWords(input_text_blob.words,stopWords)
 score={}
 new_text=""
 for i in newTextList:
     new_text+=i+' '
 newText=tb(new_text)#Stop Words Eliminated list
 score={word: tf(word,newText) for word in newText.words}
-#print(score)
 sorted_words = sorted(score.items(), key=lambda x: x[1], reverse=True)#returns a list of tupples of the sorted words found in the dictionary
-#print(sorted_words)
-input_list=string.split('.')
-strlen=len(input_list)
+
+input_list=input_string2.split('.')
+strlen,point=len(input_list),0
 summary=""
-sum_counter,sum_strlen=0,strlen
-for i in sorted_words[:7]:#Manipulate the value so as to adjust the the length of your Summary
+for i in sorted_words[:5]:
     flag=False
     for j in range(strlen):
         a=input_list[j].split(' ')
         for k in a:
             if(k.lower()==i[0]):
                 summary+=input_list[j]+'.'
-                sum_counter+=1
                 del(input_list[j])
                 strlen-=1
                 flag=True
@@ -84,8 +83,5 @@ for i in sorted_words[:7]:#Manipulate the value so as to adjust the the length o
         if(flag):
             break
 
-print("\nThe Summary using Frequency:\n")
-print(summary)
-
-sum_ratio=float(sum_counter)/float(sum_strlen)
-print ("\nThe Summary ratio is: ",sum_ratio)
+logOutputText(summary)
+print('Summary of text is out\n')

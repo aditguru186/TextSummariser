@@ -43,16 +43,16 @@ def draw_graph(graph, graph_layout='shell',
     plt.show()
 
 def preProcess(a):
-    a=re.sub("’","'",a)
+    a=re.sub("ï¿½","'",a)
     a=re.sub("'",'',a)
     a=re.sub("/",' or ',a)
-    a=re.sub('”','',a)
-    a=re.sub('“','',a)
+    a=re.sub('ï¿½','',a)
+    a=re.sub('ï¿½','',a)
     a=re.sub('"','',a)
     a=re.sub("p.m",'pm',a)
     a=re.sub("a.m",'am',a)
-    a=re.sub('…','',a)
-    a=re.sub('’',"'",a)
+    a=re.sub('ï¿½','',a)
+    a=re.sub('ï¿½',"'",a)
     return a
 
 def removeStopWords(text_list,stopWords):
@@ -209,7 +209,7 @@ EvaluatePageRank(n)
 #print(Edge_dict)
 threshold=evaluateThreshold()#Setting the Threshold value
 threshold=threshold*0.09
-print '\nSetting Threshold to be :',round(threshold,5)
+print ('\nSetting Threshold to be :',round(threshold,5))
 summary=""
 sum_count=0
 sum_ratio=0.0
@@ -220,5 +220,5 @@ for i in range(n):
 print("\nTHE SUMMARY OF THE TEXT IS :\n")
 print(summary)
 sum_ratio=(float(sum_count)/float(n))
-print '\nThe Summary ratio is :',round(sum_ratio,5)
+print ('\nThe Summary ratio is :',round(sum_ratio,5))
 draw_graph(graph, labels)

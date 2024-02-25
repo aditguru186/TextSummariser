@@ -43,16 +43,16 @@ def draw_graph(graph, graph_layout='shell',
     plt.show()
 
 def preProcess(a):
-    a=re.sub("’","'",a)
+    a=re.sub("ï¿½","'",a)
     a=re.sub("'",'',a)
     a=re.sub("/",' or ',a)
-    a=re.sub('”','',a)
-    a=re.sub('“','',a)
+    a=re.sub('ï¿½','',a)
+    a=re.sub('ï¿½','',a)
     a=re.sub('"','',a)
     a=re.sub("p.m",'pm',a)
     a=re.sub("a.m",'am',a)
-    a=re.sub('…','',a)
-    a=re.sub('’',"'",a)
+    a=re.sub('ï¿½','',a)
+    a=re.sub('ï¿½',"'",a)
     return a
 
 def removeStopWords(text_list,stopWords):
@@ -71,7 +71,8 @@ def removeStopWords(text_list,stopWords):
     return new_text
 
 def getStopWords():
-    fp=open('stopwords.txt','r')
+    currentpath = '/Users/aguru/Desktop/AdiWorkspace/python/TextSummariser/TextSummariser/Demo/'
+    fp=open((currentpath+'stopwords.txt'),'r')
     line=fp.readline()
     stop_words=[]
     while line:
@@ -172,10 +173,30 @@ def evaluateThreshold():
     thresh=math.sqrt(thresh)
     return thresh
 
+def getInputText():
+    with open('/Users/aguru/Desktop/AdiWorkspace/python/TextSummariser/TextSummariser/Demo/PageRankDemo/input.txt') as fp_input:
+         mylist = [line.rstrip('\n') for line in fp_input]
+    # fp_input = open('/Users/aguru/Desktop/AdiWorkspace/python/TextSummariser/TextSummariser/Demo/PageRankDemo/input.txt','r')
+    input_text = """"""
+    for i in mylist:
+        input_text = input_text + " " + i
+    fp_input.close()
+    return input_text
+
+def logOutputText(summary:str):
+    try:
+        with open('/Users/aguru/Desktop/AdiWorkspace/python/TextSummariser/TextSummariser/Demo/PageRankDemo/output.txt','w+t') as fp_output:
+            summary = "\nThe Summary is : "+summary
+            fp_output.write(summary)
+    except Exception as e:
+        print(e)
+
+
 ########
 ########'
 ########
-text=input('Enter the text to be summarised (within double Quotes):\n')
+# text=input('Enter the text to be summarised (within double Quotes):\n')
+text = getInputText() 
 text=preProcess(text)
 #percentageThresh=input("Enter the Percentage to which the summarization is to be done:\t")
 #print(text)
@@ -209,7 +230,7 @@ EvaluatePageRank(n)
 #print(Edge_dict)
 threshold=evaluateThreshold()#Setting the Threshold value
 threshold=threshold*0.09
-print '\nSetting Threshold to be :',round(threshold,5)
+print ('\nSetting Threshold to be :',round(threshold,5))
 summary=""
 sum_count=0
 sum_ratio=0.0
@@ -217,8 +238,9 @@ for i in range(n):
     if(PageRankSentences[i]>threshold):
         summary+=a[i]+'.'
         sum_count+=1
-print("\nTHE SUMMARY OF THE TEXT IS :\n")
-print(summary)
+print("\nTHE SUMMARY OF THE TEXT IS OUT:\n")
+# print(summary)
+logOutputText(summary)
 sum_ratio=(float(sum_count)/float(n))
-print '\nThe Summary ratio is :',round(sum_ratio,5)
+print ('\nThe Summary ratio is :',round(sum_ratio,5))
 draw_graph(graph, labels)

@@ -1,11 +1,11 @@
 import re
 
 def preProcess(a):
-    a=re.sub("’","'",a)
+    a=re.sub("ï¿½","'",a)
     a=re.sub("'",'',a)
     a=re.sub("/",' or ',a)
-    a=re.sub('”','"',a)
-    a=re.sub('“','"',a)
+    a=re.sub('ï¿½','"',a)
+    a=re.sub('ï¿½','"',a)
     a=re.sub('"',' ',a)
     a=re.sub("p.m",'pm',a)
     return a
@@ -14,4 +14,4 @@ def preProcess(a):
 
 a=input("Enter the Text:")
 a=preProcess(a)
-print a
+print (a)
